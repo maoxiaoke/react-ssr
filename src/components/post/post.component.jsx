@@ -1,77 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-export class Post extends React.Component {
-    constructor( props ) {
-        console.log( 'Post.constructor()' );
+export const Post = (props) => {
+    const isSSR = props.staticContext || window.initial_state;
+    const initialPost = props.staticContext || window.initial_state || { title: '', description: '' };
+    const [loading, setLoading] = useState(!isSSR);
+    const [post, setPost] = useState(initialPost);
 
-        super();
-
-        // component state
-        if( props.staticContext ) {
-            this.state = {
-                isLoading: false,
-                title: props.staticContext.title,
-                description: props.staticContext.body,
-            };
-        } else if( window.initial_state ) {
-            this.state = {
-                isLoading: false,
-                title: window.initial_state.title,
-                description: window.initial_state.body,
-            };
-        } else {
-            this.state = {
-                isLoading: true,
-                title: '',
-                description: '',
-            };
-        }
-    }
-
-    // fetch data
-    static fetchData() {
-        console.log( 'Post.fetchData()' );
-
-       return axios.get( 'https://jsonplaceholder.typicode.com/posts/3' ).then( response => {
-            return {
-                title: response.data.title,
-                body: response.data.body,
-            };
-        } );
-    }
-
-    // when component mounts, fetch data
-    componentDidMount() {
-        if( this.state.isLoading ) {
-            console.log( 'Post.componentDidMount()' );
-
+    useEffect(() => {
+        if (!isSSR) {
             Post.fetchData().then( data => {
-                this.setState( {
-                    isLoading: false,
+                setLoading(false);
+                setPost({
                     title: data.title,
                     description: data.body,
-                } );
+                })
             } );
         }
-    }
+    })
 
-    render() {
-        console.log( 'Post.render()' );
+    return (
+        <div className='ui-post'>
+            <p className='ui-post__title'>Post Widget</p>
 
-        return (
-            <div className='ui-post'>
-                <p className='ui-post__title'>Post Widget</p>
+            {
+                loading ? 'loading...' : (
+                    <div className='ui-post__body'>
+                        <p className='ui-post__body__title'>{ post.title }</p>
+                        <p className='ui-post__body__description'>{ post.description }</p>
+                    </div>
+                )
+            }
+        </div>
+    );
+}
 
-                {
-                    this.state.isLoading ? 'loading...' : (
-                        <div className='ui-post__body'>
-                            <p className='ui-post__body__title'>{ this.state.title }</p>
-                            <p className='ui-post__body__description'>{ this.state.description }</p>
-                        </div>
-                    )
-                }
-            </div>
-        );
-    }
+Post.fetchData = () => {
+console.log( 'Post.fetchData()' );
+
+   return axios.get( 'https://jsonplaceholder.typicode.com/posts/3' ).then( response => {
+        return {
+            title: response.data.title,
+            body: response.data.body,
+        };
+    } );
 }
