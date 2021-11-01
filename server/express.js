@@ -36,7 +36,7 @@ app.use( '*', async ( req, res ) => {
 
     // renderToString 返回组件的 HTML 结构，只执行组件的 constuctor 和 render 方法
     let appHTML = ReactDOMServer.renderToString(
-        // 使用 StaticRouter 渲染出正确的组件
+        // 使用 StaticRouter 渲染出正确的组件，并传递数据
         <StaticRouter location={ req.originalUrl } context={ componentData }>
             <App />
         </StaticRouter>
