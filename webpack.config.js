@@ -11,12 +11,7 @@ module.exports = {
     mode: ( 'development' === process.env.NODE_ENV ? 'development' : 'production' ),
 
     // entry files
-    entry: 'development' === process.env.NODE_ENV ? [
-        './src/index.dev.js', // in development
-    ] : [
-        './src/index.prod.js', // in production
-    ],
-
+    entry: './src/index.js',
     // output files and chunks
     output: {
         path: path.resolve( __dirname, 'dist' ),

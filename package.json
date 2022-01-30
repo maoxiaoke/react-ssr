@@ -3,12 +3,12 @@
   "description": "A React server-side rendering (SSR) sample project.",
   "version": "1.0.0",
   "scripts": {
-    "start": "NODE_ENV=development webpack serve",
     "build": "NODE_ENV=production webpack",
     "start:ssr": "node server"
   },
   "dependencies": {
     "axios": "^0.21.0",
+    "nodemon": "^2.0.15",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },

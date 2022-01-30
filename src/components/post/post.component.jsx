@@ -17,7 +17,7 @@ export const Post = (props) => {
                 })
             } );
         }
-    })
+    }, [])
 
     return (
         <div className='ui-post'>
